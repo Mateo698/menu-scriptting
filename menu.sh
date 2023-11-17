@@ -10,35 +10,57 @@ SISTEMA_FILE="sistema.txt"
 
 # Función para gestionar usuarios
 gestionar_usuarios() {
-    echo "Seleccione una opción para gestión de usuarios:"
-    echo "1. Crear usuario"
-    echo "2. Deshabilitar usuario"
-    echo "3. Modificar usuario"
-    read -p "Ingrese su opción: " opcion
 
-    case $opcion in
-        1)
-            read -p "Ingrese el nombre de usuario a crear: " nuevo_usuario
-            # Agregar lógica para crear usuario
-            echo "Usuario creado: $nuevo_usuario" >> $USUARIOS_FILE
-            ;;
-        2)
-            read -p "Ingrese el nombre de usuario a deshabilitar: " usuario_a_deshabilitar
-            # Agregar lógica para deshabilitar usuario
-            # Eliminar usuario del sistema y deshabilitarlo de la BD
-            ;;
-        3)
-            read -p "Ingrese el nombre de usuario a modificar: " usuario_a_modificar
-            # Agregar lógica para modificar usuario
-            ;;
-        *)
-            echo "Opción no válida"
-            ;;
-    esac
+    while true; do
+
+        echo ""
+        echo "GESTIÓN DE USUARIOS"
+        echo "Seleccione una opción para gestión de usuarios:"
+        echo "1. Crear usuario"
+        echo "2. Deshabilitar usuario"
+        echo "3. Modificar usuario"
+
+        read -p "Ingrese su opción: " item
+
+        case $item in
+            1)
+                read -p "Ingrese el nombre de usuario a crear: " nuevo_usuario
+                # Verificar si el usuario ya existe
+                if id "$nuevo_usuario" >/dev/null 2>&1; then
+                    echo "El usuario $nuevo_usuario ya existe."
+                else
+                    # Crear el usuario y guardar la información en el archivo usuarios.txt
+                    sudo useradd "$nuevo_usuario"
+                    echo "$nuevo_usuario">> "$USUARIOS_FILE"
+                    echo "Usuario $nuevo_usuario creado exitosamente."
+                fi
+                ;;
+            2)
+                read -p "Ingrese el nombre de usuario a deshabilitar: " usuario_a_deshabilitar
+                # Agregar lógica para deshabilitar usuario
+                # Eliminar usuario del sistema y deshabilitarlo de la BD
+                ;;
+            3)
+                read -p "Ingrese el nombre de usuario a modificar: " usuario_a_modificar
+                # Agregar lógica para modificar usuario
+                ;;
+            salir)
+                exit 0
+                ;;
+            atras)
+                menu
+                ;;
+            *)
+                echo "Opción no válida"
+                ;;
+        esac
+    done
 }
 
 # Función para gestionar departamentos
 gestionar_deptos() {
+    echo ""
+    echo "GESTIÓN DE DEPARTAMENTOS"
     echo "Seleccione una opción para gestión de departamentos:"
     echo "1. Crear departamento"
     echo "2. Deshabilitar departamento"
@@ -68,6 +90,8 @@ gestionar_deptos() {
 
 # Función para gestionar asignaciones de usuarios a departamentos
 gestionar_asignaciones() {
+    echo ""
+    echo "GESTIÓN DE USUARIOS A DEPARTAMENTOS"
     echo "Seleccione una opción para gestión de asignaciones:"
     echo "1. Asignar usuario a departamento"
     echo "2. Desasignar usuario de departamento"
@@ -93,6 +117,8 @@ gestionar_asignaciones() {
 
 # Función para gestionar logs
 gestionar_logs() {
+    echo ""
+    echo "GESTIÓN DE LOGS"
     echo "Seleccione una opción para gestión de logs:"
     echo "1. Buscar en logs"
     echo "2. Generar estadísticas de logs"
@@ -114,6 +140,8 @@ gestionar_logs() {
 
 # Función para gestionar actividades en el sistema
 gestionar_actividades() {
+    echo ""
+    echo "GESTIÓN DE ACTIVIDADES"
     echo "Seleccione una opción para gestión de actividades en el sistema:"
     echo "1. Rastrear actividades de memoria"
     echo "2. Rastrear actividades de procesos"
@@ -138,6 +166,8 @@ gestionar_actividades() {
 
 # Función para gestionar el sistema
 gestionar_sistema() {
+    echo ""
+    echo "GESTIÓN DEL SISTEMA"
     echo "Seleccione una opción para gestión del sistema:"
     echo "1. Monitorizar estado del sistema"
     echo "2. Crear reporte de alerta"
@@ -156,19 +186,20 @@ gestionar_sistema() {
     esac
 }
 
-# Menú principal
-while true; do
-    echo "Seleccione un módulo de gestión:"
+menu(){
+    echo ""
+    echo "Bienvenido al sistema de gestión de empresa"    
+    echo "Seleccione una opción para continuar:"
     echo "1. Gestión de usuarios"
     echo "2. Gestión de departamentos"
     echo "3. Usuarios x departamentos"
     echo "4. Gestión de logs"
     echo "5. Gestión de actividades en el sistema"
     echo "6. Gestión del sistema"
-    echo "7. Salir"
-    read -p "Ingrese su opción: " modulo
-
-    case $modulo in
+    
+    read -p "Ingrese su opción: " item
+    
+    case $item in
         1)
             gestionar_usuarios
             ;;
@@ -178,4 +209,25 @@ while true; do
         3)
             gestionar_asignaciones
             ;;
+        4)
+            gestionar_logs 
+            ;;
+        5)
+            gestionar_actividades
+            ;;
+        6)
+            gestionar_sistema
+            ;;
+
+        salir)
+            exit 0
+            ;;
         
+        *)
+            echo "Opción no válida"
+            ;;
+    esac
+        
+}
+
+menu
