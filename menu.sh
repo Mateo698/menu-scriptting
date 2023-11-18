@@ -129,19 +129,33 @@ gestionar_asignaciones() {
         echo "Seleccione una opción para gestión de asignaciones:"
         echo "1. Asignar usuario a departamento"
         echo "2. Desasignar usuario de departamento"
-        read -p "Ingrese su opción: " opcion
+        read -p "Ingrese su opción: " item
 
-        case $opcion in
+        case $item in
             1)
                 read -p "Ingrese el nombre de usuario a asignar: " usuario_asignar
                 read -p "Ingrese el nombre del departamento: " depto_asignar
-                # Agregar lógica para asignar usuario a departamento
-                echo "Asignación: $usuario_asignar -> $depto_asignar" >> $ASIGNACIONES_FILE
+
+                if [id "$nuevo_usuario" >/dev/null 2>&1] && [grep -q "^$depto_a_deshabilitar:" /etc/group]; then
+                    # Asignar usuario a departamento y guardar la información en el archivo asignaciones.txt
+                    sudo usermod -a -G "$depto_asignar" "$usuario_asignar"
+                    echo "$usuario_asignar;$depto_asignar;ASIGNADO" >> "$ASIGNACIONES_FILE"
+                    echo "Usuario $usuario_asignar asignado exitosamente al departamento $depto_asignar."
+                else
+                    echo "El usuario $usuario_asignar o el departamento $depto_asignar no existen."
+                fi
                 ;;
             2)
                 read -p "Ingrese el nombre de usuario a desasignar: " usuario_desasignar
                 read -p "Ingrese el nombre del departamento: " depto_desasignar
-                # Agregar lógica para desasignar usuario de departamento
+                # Eliminar asignación de usuario a departamento y eliminar registro correspondiente en asignaciones.txt
+                if [id "$nuevo_usuario" >/dev/null 2>&1] && [grep -q "^$depto_a_deshabilitar:" /etc/group]; then
+                    sudo gpasswd -d "$usuario_desasignar" "$depto_desasignar"
+                    sed -i "s/$usuario_desasignar;$depto_desasignar;ASIGNADO/$usuario_desasignar;$depto_desasignar;DESASIGNADO/g" "$ASIGNACIONES_FILE"                    
+                    echo "Usuario $usuario_desasignar desasignado exitosamente del departamento $depto_desasignar."
+                else
+                    echo "El usuario $usuario_desasignar o el departamento $depto_desasignar no existen."
+                fi
                 ;;
             salir)
                 exit 0
