@@ -30,7 +30,7 @@ gestionar_usuarios() {
                     echo "El usuario $nuevo_usuario ya existe."
                 else
                     # Crear el usuario y guardar la información en el archivo usuarios.txt
-                    sudo useradd "$nuevo_usuario"
+                    sudo adduser "$nuevo_usuario"
                     echo "$nuevo_usuario;ACTIVO">> "$USUARIOS_FILE"
                     echo "Usuario $nuevo_usuario creado exitosamente."
                 fi
@@ -67,33 +67,57 @@ gestionar_usuarios() {
 
 # Función para gestionar departamentos
 gestionar_deptos() {
-    echo ""
-    echo "GESTIÓN DE DEPARTAMENTOS"
-    echo "Seleccione una opción para gestión de departamentos:"
-    echo "1. Crear departamento"
-    echo "2. Deshabilitar departamento"
-    echo "3. Modificar departamento"
-    read -p "Ingrese su opción: " opcion
 
-    case $opcion in
-        1)
-            read -p "Ingrese el nombre del departamento a crear: " nuevo_depto
-            # Agregar lógica para crear departamento
-            echo "Departamento creado: $nuevo_depto" >> $DEPTOS_FILE
-            ;;
-        2)
-            read -p "Ingrese el nombre del departamento a deshabilitar: " depto_a_deshabilitar
-            # Agregar lógica para deshabilitar departamento
-            # Eliminar departamento del sistema y deshabilitarlo de la BD
-            ;;
-        3)
-            read -p "Ingrese el nombre del departamento a modificar: " depto_a_modificar
-            # Agregar lógica para modificar departamento
-            ;;
-        *)
-            echo "Opción no válida"
-            ;;
-    esac
+    while true; do
+        echo ""
+        echo "GESTIÓN DE DEPARTAMENTOS"
+        echo "Seleccione una opción para gestión de departamentos:"
+        echo "1. Crear departamento"
+        echo "2. Deshabilitar departamento"
+        echo "3. Modificar departamento"
+        read -p "Ingrese su opción: " item
+
+        case $item in
+            1)
+                read -p "Ingrese el nombre del departamento a crear: " nuevo_depto
+                # Verificar si el departamento ya existe
+                if grep -q "^$nuevo_depto:" /etc/group; then
+                    echo "El departamento $nuevo_depto ya existe."
+                else
+                    # Crear el grupo y guardar la información en el archivo deptos.txt
+                    sudo addgroup "$nuevo_depto"
+                    echo "$nuevo_depto;ACTIVO" >> "$DEPTOS_FILE"
+                    echo "Departamento $nuevo_depto creado exitosamente."
+                fi
+                ;;
+            2)
+                read -p "Ingrese el nombre del departamento a deshabilitar: " depto_a_deshabilitar
+                if grep -q "^$depto_a_deshabilitar:" /etc/group; then
+                    # Deshabilitar el grupo y guardar la información en el archivo deptos.txt
+                    sudo groupdel "$depto_a_deshabilitar"
+                    sed -i "s/$depto_a_deshabilitar;ACTIVO/$depto_a_deshabilitar;INACTIVO/g" "$DEPTOS_FILE"
+                    echo "Departamento $depto_a_deshabilitar deshabilitado exitosamente."
+                    
+                else
+                    echo "El departamento $depto_a_deshabilitar no existe."
+                fi
+                ;;
+            3)
+                read -p "Ingrese el nombre del departamento a modificar: " depto_a_modificar
+                # Agregar lógica para modificar departamento
+                ;;
+
+            salir)
+                exit 0
+                ;;
+            atras)
+                menu
+                ;;
+            *)
+                echo "Opción no válida"
+                ;;
+        esac
+    done
 }
 
 # Función para gestionar asignaciones de usuarios a departamentos
