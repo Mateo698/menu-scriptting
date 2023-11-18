@@ -31,14 +31,22 @@ gestionar_usuarios() {
                 else
                     # Crear el usuario y guardar la información en el archivo usuarios.txt
                     sudo useradd "$nuevo_usuario"
-                    echo "$nuevo_usuario">> "$USUARIOS_FILE"
+                    echo "$nuevo_usuario;ACTIVO">> "$USUARIOS_FILE"
                     echo "Usuario $nuevo_usuario creado exitosamente."
                 fi
                 ;;
             2)
                 read -p "Ingrese el nombre de usuario a deshabilitar: " usuario_a_deshabilitar
-                # Agregar lógica para deshabilitar usuario
-                # Eliminar usuario del sistema y deshabilitarlo de la BD
+                if id "$usuario_a_deshabilitar" >/dev/null 2>&1; then
+                    echo "Se eliminará el usuario $usuario_a_deshabilitar"
+                    # Deshabilitar el usuario y guardar la información en el archivo usuarios.txt
+                    sudo userdel -r "$usuario_a_deshabilitar"
+                    sed -i "s/$usuario_a_deshabilitar;ACTIVO/$usuario_a_deshabilitar;INACTIVO/g" "$USUARIOS_FILE"
+                    echo "Usuario $usuario_a_deshabilitar deshabilitado exitosamente."
+
+                else
+                    echo "El usuario $usuario_a_deshabilitar no existe."
+                fi
                 ;;
             3)
                 read -p "Ingrese el nombre de usuario a modificar: " usuario_a_modificar
