@@ -122,100 +122,133 @@ gestionar_deptos() {
 
 # Función para gestionar asignaciones de usuarios a departamentos
 gestionar_asignaciones() {
-    echo ""
-    echo "GESTIÓN DE USUARIOS A DEPARTAMENTOS"
-    echo "Seleccione una opción para gestión de asignaciones:"
-    echo "1. Asignar usuario a departamento"
-    echo "2. Desasignar usuario de departamento"
-    read -p "Ingrese su opción: " opcion
+    while true; do
 
-    case $opcion in
-        1)
-            read -p "Ingrese el nombre de usuario a asignar: " usuario_asignar
-            read -p "Ingrese el nombre del departamento: " depto_asignar
-            # Agregar lógica para asignar usuario a departamento
-            echo "Asignación: $usuario_asignar -> $depto_asignar" >> $ASIGNACIONES_FILE
-            ;;
-        2)
-            read -p "Ingrese el nombre de usuario a desasignar: " usuario_desasignar
-            read -p "Ingrese el nombre del departamento: " depto_desasignar
-            # Agregar lógica para desasignar usuario de departamento
-            ;;
-        *)
-            echo "Opción no válida"
-            ;;
-    esac
+        echo ""
+        echo "GESTIÓN DE USUARIOS A DEPARTAMENTOS"
+        echo "Seleccione una opción para gestión de asignaciones:"
+        echo "1. Asignar usuario a departamento"
+        echo "2. Desasignar usuario de departamento"
+        read -p "Ingrese su opción: " opcion
+
+        case $opcion in
+            1)
+                read -p "Ingrese el nombre de usuario a asignar: " usuario_asignar
+                read -p "Ingrese el nombre del departamento: " depto_asignar
+                # Agregar lógica para asignar usuario a departamento
+                echo "Asignación: $usuario_asignar -> $depto_asignar" >> $ASIGNACIONES_FILE
+                ;;
+            2)
+                read -p "Ingrese el nombre de usuario a desasignar: " usuario_desasignar
+                read -p "Ingrese el nombre del departamento: " depto_desasignar
+                # Agregar lógica para desasignar usuario de departamento
+                ;;
+            salir)
+                exit 0
+                ;;
+            atras)
+                menu
+                ;;
+            *)
+                echo "Opción no válida"
+                ;;
+        esac
+    done
 }
 
 # Función para gestionar logs
 gestionar_logs() {
-    echo ""
-    echo "GESTIÓN DE LOGS"
-    echo "Seleccione una opción para gestión de logs:"
-    echo "1. Buscar en logs"
-    echo "2. Generar estadísticas de logs"
-    read -p "Ingrese su opción: " opcion
+    while true; do
+        echo ""
+        echo "GESTIÓN DE LOGS"
+        echo "Seleccione una opción para gestión de logs:"
+        echo "1. Buscar en logs"
+        echo "2. Generar estadísticas de logs"
+        read -p "Ingrese su opción: " opcion
 
-    case $opcion in
-        1)
-            read -p "Ingrese el patrón de búsqueda: " patron_busqueda
-            # Agregar lógica para buscar en logs con awk, sed, grep
-            ;;
-        2)
-            # Agregar lógica para generar estadísticas de logs con patrones específicos
-            ;;
-        *)
-            echo "Opción no válida"
-            ;;
-    esac
+        case $opcion in
+            1)
+                read -p "Ingrese el patrón de búsqueda: " patron_busqueda
+                # Agregar lógica para buscar en logs con awk, sed, grep
+                ;;
+            2)
+                # Agregar lógica para generar estadísticas de logs con patrones específicos
+                ;;
+            salir)
+                exit 0
+                ;;
+            atras)
+                menu
+                ;;
+            *)
+                echo "Opción no válida"
+                ;;
+        esac
+    done
 }
 
 # Función para gestionar actividades en el sistema
 gestionar_actividades() {
-    echo ""
-    echo "GESTIÓN DE ACTIVIDADES"
-    echo "Seleccione una opción para gestión de actividades en el sistema:"
-    echo "1. Rastrear actividades de memoria"
-    echo "2. Rastrear actividades de procesos"
-    echo "3. Rastrear actividades de archivos"
-    read -p "Ingrese su opción: " opcion
+    while true; do
+        echo ""
+        echo "GESTIÓN DE ACTIVIDADES"
+        echo "Seleccione una opción para gestión de actividades en el sistema:"
+        echo "1. Rastrear actividades de memoria"
+        echo "2. Rastrear actividades de procesos"
+        echo "3. Rastrear actividades de archivos"
+        read -p "Ingrese su opción: " opcion
 
-    case $opcion in
-        1)
-            # Agregar lógica para rastrear actividades de memoria
-            ;;
-        2)
-            # Agregar lógica para rastrear actividades de procesos
-            ;;
-        3)
-            # Agregar lógica para rastrear actividades de archivos
-            ;;
-        *)
-            echo "Opción no válida"
-            ;;
-    esac
+        case $opcion in
+            1)
+                # Agregar lógica para rastrear actividades de memoria
+                ;;
+            2)
+                # Agregar lógica para rastrear actividades de procesos
+                ;;
+            3)
+                # Agregar lógica para rastrear actividades de archivos
+                ;;
+            salir)
+                exit 0
+                ;;
+            atras)
+                menu
+                ;;
+            *)
+                echo "Opción no válida"
+                ;;
+        esac
+    done
 }
 
 # Función para gestionar el sistema
 gestionar_sistema() {
-    echo ""
-    echo "GESTIÓN DEL SISTEMA"
-    echo "Seleccione una opción para gestión del sistema:"
-    echo "1. Monitorizar estado del sistema"
-    echo "2. Crear reporte de alerta"
-    read -p "Ingrese su opción: " opcion
+    while true; do
+        echo ""
+        echo "GESTIÓN DEL SISTEMA"
+        echo "Seleccione una opción para gestión del sistema:"
+        echo "1. Monitorizar estado del sistema"
+        echo "2. Crear reporte de alerta"
+        read -p "Ingrese su opción: " opcion
 
-    case $opcion in
-        1)
-            # Agregar lógica para monitorizar estado del sistema
-            ;;
-        2)
-            # Agregar lógica para crear reporte de alerta
-            ;;
-        *)
-            echo "Opción no válida"
-            ;;
-    esac
+        case $opcion in
+            1)
+                # Agregar lógica para monitorizar estado del sistema
+                ;;
+            2)
+                # Agregar lógica para crear reporte de alerta
+                ;;
+            salir)
+                exit 0
+                ;;
+            atras)
+                menu
+                ;;
+            *)
+                echo "Opción no válida"
+                ;;
+        esac
+    done
 }
 
 menu(){
