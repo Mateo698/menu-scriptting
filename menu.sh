@@ -170,8 +170,29 @@ gestionar_asignaciones() {
     done
 }
 
+# Función para buscar líneas que contengan una cadena específica en un archivo de logs
+buscar_cadena() {
+    grep "$1" "$LOG_FILE"
+}
+
+# Función para generar estadísticas específicas en un archivo de logs
+generar_estadisticas() {
+    # Ejemplo: Contar la cantidad de mensajes de error en el log
+    errores=$(grep "error" "$LOG_FILE" | wc -l)
+    echo "Cantidad de errores: $errores"
+    
+    # Puedes agregar más estadísticas según tus necesidades
+}
+
 # Función para gestionar logs
 gestionar_logs() {
+    read -p "Ingrese la ruta del archivo de logs: " LOG_FILE
+
+    if [ ! -f "$LOG_FILE" ]; then
+        echo "El archivo de logs no existe. Verifique la ruta y vuelva a intentar."
+        return
+    fi
+
     while true; do
         echo ""
         echo "GESTIÓN DE LOGS"
@@ -183,10 +204,13 @@ gestionar_logs() {
         case $opcion in
             1)
                 read -p "Ingrese el patrón de búsqueda: " patron_busqueda
-                # Agregar lógica para buscar en logs con awk, sed, grep
+                # Lógica para buscar en logs con awk, sed, grep
+                echo "Resultados de la búsqueda para el patrón '$patron_busqueda':"
+                buscar_cadena "$patron_busqueda"
                 ;;
             2)
-                # Agregar lógica para generar estadísticas de logs con patrones específicos
+                # Lógica para generar estadísticas de logs con patrones específicos
+                generar_estadisticas
                 ;;
             salir)
                 exit 0
