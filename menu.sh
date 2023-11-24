@@ -8,6 +8,70 @@ LOGS_FILE="logs.txt"
 ACTIVIDADES_FILE="actividades.txt"
 SISTEMA_FILE="sistema.txt"
 
+# Menu para modificar usuario
+modificar_usuario(){
+    while true; do
+        echo ""
+        echo "MODIFICAR USUARIO"
+        echo "Seleccione una opción para modificar usuario:"
+        echo "1. Modificar nombre de usuario"
+        echo "2. Modificar contraseña de usuario"
+        echo "3. Modificar directorio de usuario"        
+        echo "4. Modificar grupo de usuario"        
+        echo "5. Modificar fecha de expiración de usuario"
+
+        read -p "Ingrese el nombre de usuario a modificar: " usuario_a_modificar
+        read -p "Ingrese su opción: " item
+
+        if id "$usuario_a_modificar" >/dev/null 2>&1; then
+            case $item in
+                1)
+                    read -p "Ingrese el nuevo nombre de usuario: " nuevo_nombre                   
+                    sudo usermod -l "$nuevo_nombre" "$usuario_a_modificar"
+                    echo "Usuario $usuario_a_modificar modificado exitosamente."
+                    ;;
+                2)                    
+                    sudo passwd "$usuario_a_modificar"
+                    echo "Usuario $usuario_a_modificar modificado exitosamente."     
+                    ;;    
+                3)
+                    read -p "Ingrese el nuevo directorio de usuario: " nuevo_directorio
+                    sudo usermod -d "$nuevo_directorio" "$usuario_a_modificar"
+                    echo "Usuario $usuario_a_modificar modificado exitosamente."
+                    ;;    
+                4)
+                    read -p "Ingrese el nuevo grupo de usuario: " nuevo_grupo
+                    sudo usermod -g "$nuevo_grupo" "$usuario_a_modificar"
+                    echo "Usuario $usuario_a_modificar modificado exitosamente."
+                    ;;
+                5)
+                    read -p "Ingrese la nueva fecha de expiración de usuario: " nueva_fecha
+                    sudo usermod -e "$nueva_fecha" "$usuario_a_modificar"
+                    echo "Usuario $usuario_a_modificar modificado exitosamente."
+                    ;;      
+                salir)
+                    exit 0
+                    ;;
+                atras)
+                    gestionar_usuarios
+                    ;; 
+                *)
+                echo "Opción no válida"
+                ;;
+
+            esac
+
+        else
+            echo "El usuario $usuario_a_modificar no existe."
+        fi
+
+    done
+
+    
+
+}
+
+
 # Función para gestionar usuarios
 gestionar_usuarios() {
 
@@ -49,8 +113,7 @@ gestionar_usuarios() {
                 fi
                 ;;
             3)
-                read -p "Ingrese el nombre de usuario a modificar: " usuario_a_modificar
-                # Agregar lógica para modificar usuario
+                modificar_usuario              
                 ;;
             salir)
                 exit 0
@@ -65,6 +128,47 @@ gestionar_usuarios() {
     done
 }
 
+
+modificar_grupo(){
+    while true; do
+        echo ""
+        echo "MODIFICAR GRUPO"
+        echo "Seleccione una opción para modificar grupo:"
+        echo "1. Modificar nombre de grupo"
+        echo "2. Modificar contraseña de grupo"         
+
+        read -p "Ingrese el nombre de grupo a modificar: " grupo_a_modificar
+        read -p "Ingrese su opción: " item
+
+        if grep -q "^$grupo_a_modificar:" /etc/group; then
+            case $item in
+                1)
+                    read -p "Ingrese el nuevo nombre de grupo: " nuevo_nombre                   
+                    sudo groupmod -n "$nuevo_nombre" "$grupo_a_modificar"
+                    echo "Grupo $grupo_a_modificar modificado exitosamente."
+                    ;;
+                2)                    
+                    sudo gpasswd "$grupo_a_modificar"
+                    echo "Grupo $grupo_a_modificar modificado exitosamente."     
+                    ;;     
+                salir)
+                    exit 0
+                    ;;
+                atras)
+                    gestionar_deptos
+                    ;; 
+                *)
+                echo "Opción no válida"
+                ;;
+
+            esac
+
+        else
+            echo "El grupo $grupo_a_modificar no existe."
+        fi
+
+    done
+}
 # Función para gestionar departamentos
 gestionar_deptos() {
 
@@ -103,8 +207,7 @@ gestionar_deptos() {
                 fi
                 ;;
             3)
-                read -p "Ingrese el nombre del departamento a modificar: " depto_a_modificar
-                # Agregar lógica para modificar departamento
+                modificar_grupo
                 ;;
 
             salir)
@@ -290,47 +393,48 @@ gestionar_sistema() {
 }
 
 menu(){
-    echo ""
-    echo "Bienvenido al sistema de gestión de empresa"    
-    echo "Seleccione una opción para continuar:"
-    echo "1. Gestión de usuarios"
-    echo "2. Gestión de departamentos"
-    echo "3. Usuarios x departamentos"
-    echo "4. Gestión de logs"
-    echo "5. Gestión de actividades en el sistema"
-    echo "6. Gestión del sistema"
-    
-    read -p "Ingrese su opción: " item
-    
-    case $item in
-        1)
-            gestionar_usuarios
-            ;;
-        2)
-            gestionar_deptos
-            ;;
-        3)
-            gestionar_asignaciones
-            ;;
-        4)
-            gestionar_logs 
-            ;;
-        5)
-            gestionar_actividades
-            ;;
-        6)
-            gestionar_sistema
-            ;;
+    while true; do
+        echo ""
+        echo "Bienvenido al sistema de gestión de empresa"    
+        echo "Seleccione una opción para continuar:"
+        echo "1. Gestión de usuarios"
+        echo "2. Gestión de departamentos"
+        echo "3. Usuarios x departamentos"
+        echo "4. Gestión de logs"
+        echo "5. Gestión de actividades en el sistema"
+        echo "6. Gestión del sistema"
+        
+        read -p "Ingrese su opción: " item
+        
+        case $item in
+            1)
+                gestionar_usuarios
+                ;;
+            2)
+                gestionar_deptos
+                ;;
+            3)
+                gestionar_asignaciones
+                ;;
+            4)
+                gestionar_logs 
+                ;;
+            5)
+                gestionar_actividades
+                ;;
+            6)
+                gestionar_sistema
+                ;;
 
-        salir)
-            exit 0
-            ;;
-        
-        *)
-            echo "Opción no válida"
-            ;;
-    esac
-        
+            salir)
+                exit 0
+                ;;
+            
+            *)
+                echo "Opción no válida"
+                ;;
+        esac
+    done
 }
 
 menu
