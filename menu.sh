@@ -24,11 +24,8 @@ modificar_usuario() {
         echo "Seleccione una opción para modificar usuario:"
         echo "1. Modificar nombre de usuario"
         echo "2. Modificar contraseña de usuario"
-        echo "3. Modificar directorio de usuario"
-        echo "4. Modificar grupo de usuario"
-        echo "3. Modificar directorio de usuario"
-        echo "4. Modificar grupo de usuario"
-        echo "5. Modificar fecha de expiración de usuario"
+        echo "3. Modificar grupo de usuario"
+        echo "4. Modificar fecha de expiración de usuario"
         read -p "Ingrese su opción: " item
 
         case $item in
@@ -58,24 +55,12 @@ modificar_usuario() {
                 existe=$(validar_usuario "$usuario_a_modificar")
 
                 if [ "$existe" == "existe" ]; then
-
-                    read -p "Ingrese el nuevo directorio de usuario: " nuevo_directorio
-                    sudo usermod -d "$nuevo_directorio" "$usuario_a_modificar"
-                    echo "Usuario $usuario_a_modificar modificado exitosamente."
-                fi
-
-                ;;
-            4)
-                read -p "Ingrese el nombre de usuario a modificar: " usuario_a_modificar
-                existe=$(validar_usuario "$usuario_a_modificar")
-
-                if [ "$existe" == "existe" ]; then
                     read -p "Ingrese el nuevo grupo de usuario: " nuevo_grupo
                     sudo usermod -g "$nuevo_grupo" "$usuario_a_modificar"
                     echo "Usuario $usuario_a_modificar modificado exitosamente."
                 fi
                 ;;
-            5)
+            4)
                 read -p "Ingrese el nombre de usuario a modificar: " usuario_a_modificar
                 existe=$(validar_usuario "$usuario_a_modificar")
 
