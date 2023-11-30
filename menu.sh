@@ -471,7 +471,7 @@ gestionar_logs() {
         echo "2. Generar estadísticas de logs"
 	echo "\nEscriba \"atras\" para volver, o \"salir\" para cerrar el programa"
         read -p "Ingrese su opción: " opcion
-        nueva_actividad "$current" "archivos" "lectura de archivo de logs $LOG_FILE"
+        
         case $opcion in
             1)  read -p "Ingrese la ruta del archivo de logs: " LOG_FILE
                 
@@ -483,7 +483,7 @@ gestionar_logs() {
                 # Lógica para buscar en logs con awk, sed, grep
                 echo "Resultados de la búsqueda para el patrón '$patron_busqueda':"
                 buscar_cadena "$patron_busqueda"
-                nueva_actividad "$current" "archivos" "busqueda por patrón: $patron_busqueda"
+                
                 ;;
             2)
                 echo "\n1. Estadísticas del Kernel"
