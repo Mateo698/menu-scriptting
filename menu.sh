@@ -250,6 +250,7 @@ gestionar_deptos() {
         echo "1. Crear departamento"
         echo "2. Deshabilitar departamento"
         echo "3. Modificar departamento"
+        echo "4. Habilitar departamento"
 	echo "\nEscriba \"atras\" para volver, o \"salir\" para cerrar el programa"
         read -p "Ingrese su opción: " item
         nueva_actividad "$current" "procesos" "gestión de departamentos"
@@ -282,7 +283,20 @@ gestionar_deptos() {
             3)
                 modificar_grupo
                 ;;
-            
+            4)
+                read -p "Ingrese el nombre del departamento a habilitar: " depto_a_habilitar
+                # Verificar si el departamento ya existe
+                if grep -q "^$depto_a_habilitar:" /etc/group; then
+                    echo "El departamento $nuevo_depto ya esta habilitado."
+                else
+                    # Crear el grupo y guardar la información en el archivo deptos.txt
+                    sudo addgroup "$nuevo_depto"
+                    echo "$nuevo_depto;ACTIVO" >> "$DEPTOS_FILE"
+                    echo "Departamento $nuevo_depto creado exitosamente."
+                    nueva_actividad "$current" "memoria" "crear $nuevo_depto"
+                fi
+                ;;
+                
             salir)
                 exit 0
                 ;;
