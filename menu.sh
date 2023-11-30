@@ -348,7 +348,7 @@ mostrar_estadisticas_kernel() {
     advertencias_kernel=$(grep -ic "warning" /var/log/kern.log)
     echo "Número de mensajes de advertencia en el registro del kernel: $advertencias_kernel"
     
-    # Puedes agregar más estadísticas aquí según tus necesidades
+
 }
 
 
@@ -387,8 +387,7 @@ mostrar_estadisticas_boot() {
     # Mensajes de error durante el arranque
     echo "Mensajes de error durante el arranque:"
     grep -i "error" /var/log/boot.log
-    
-    # Puedes agregar más estadísticas aquí según tus necesidades
+
 }
 
 
