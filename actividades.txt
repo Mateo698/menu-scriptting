@@ -1,0 +1,31 @@
+admin;procesos;inicio de sesión;2023-11-30T01:30:50Z
+admin;procesos;gestión de usuarios;2023-11-30T01:30:56Z
+admin;memoria;crear usuario prueba;2023-11-30T01:31:54Z
+admin;procesos;gestión de usuarios;2023-11-30T01:32:02Z
+admin;procesos;gestión de departamentos;2023-11-30T01:32:08Z
+admin;memoria;crear coolparment;2023-11-30T01:32:15Z
+admin;procesos;gestión de departamentos;2023-11-30T01:32:19Z
+admin;procesos;gestión de usuarios a departamentos;2023-11-30T01:32:23Z
+admin;procesos;gestión de usuarios a departamentos;2023-11-30T01:32:35Z
+admin;procesos;inicio de sesión;2023-11-30T01:33:29Z
+admin;procesos;gestión de actividades;2023-11-30T01:33:37Z
+admin;archivos;rastreo actividades de memoria;2023-11-30T01:33:37Z
+admin;procesos;gestión de actividades;2023-11-30T01:33:55Z
+admin;archivos;rastreo actividades de procesos;2023-11-30T01:33:55Z
+admin;procesos;gestión de actividades;2023-11-30T01:34:06Z
+admin;archivos;rastreo actividades de archivos;2023-11-30T01:34:06Z
+admin;procesos;gestión de actividades;2023-11-30T01:34:10Z
+admin;procesos;inicio de sesión;2023-11-30T01:37:01Z
+admin;procesos;inicio de sesión;2023-11-30T01:39:40Z
+admin;procesos;inicio de sesión;2023-11-30T01:40:55Z
+admin;procesos;inicio de sesión;2023-11-30T01:41:30Z
+admin;procesos;inicio de sesión;2023-11-30T01:43:17Z
+admin;procesos;inicio de sesión;2023-11-30T01:43:40Z
+admin;procesos;inicio de sesión;2023-11-30T01:44:54Z
+prueba;procesos;inicio de sesión;2023-11-30T01:54:47Z
+prueba;procesos;inicio de sesión;2023-11-30T01:55:15Z
+prueba;procesos;inicio de sesión;2023-11-30T01:55:38Z
+prueba;procesos;inicio de sesión;2023-11-30T01:57:00Z
+prueba;procesos;gestión de usuarios;2023-11-30T01:59:29Z
+prueba;memoria;deshabilitar a prueba;2023-11-30T01:59:36Z
+prueba;procesos;gestión de usuarios;2023-11-30T01:59:41Z

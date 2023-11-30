@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# Definir archivos para cada módulo
+# Definir archivos para cada móduo
+current="none"
 USUARIOS_FILE="usuarios.txt"
 DEPTOS_FILE="deptos.txt"
 ASIGNACIONES_FILE="asignaciones.txt"
@@ -8,7 +9,17 @@ LOGS_FILE="logs.txt"
 ACTIVIDADES_FILE="actividades.txt"
 SISTEMA_FILE="sistema.txt"
 
-validar_usuario(){
+nueva_actividad() {
+    user=$1
+    category=$2
+    action=$3
+    timestamp=$(date +"%Y-%m-%dT%H:%M:%SZ")
+
+    archivo="actividades.txt"
+    echo "$user;$category;$action;$timestamp" >> "$archivo"
+}
+
+validar_usuario() {
     local nombre=$1
     if id "$nombre" >/dev/null 2>&1; then
         return "existe"
@@ -18,18 +29,20 @@ validar_usuario(){
 }
 
 # Menu para modificar usuario
-modificar_usuario(){
+modificar_usuario() {
     while true; do
         echo ""
         echo "MODIFICAR USUARIO"
         echo "Seleccione una opción para modificar usuario:"
-        echo "1. Modificar nombre de usuario"
+	echo "1. Modificar nombre de usuario"
         echo "2. Modificar contraseña de usuario"
         echo "3. Modificar directorio de usuario"        
         echo "4. Modificar grupo de usuario"        
         echo "5. Modificar fecha de expiración de usuario"
+	echo ""
+	echo "Escriba \"atras\" para volver, o \"salir\" para cerrar el programa"
         read -p "Ingrese su opción: " item
-        
+        nueva_actividad "$current" "procesos" "modificar usuario"
         case $item in
         
             1)
@@ -40,6 +53,7 @@ modificar_usuario(){
                     read -p "Ingrese el nuevo nombre de usuario: " nuevo_nombre                   
                     sudo usermod -l "$nuevo_nombre" "$usuario_a_modificar"
                     echo "Usuario $usuario_a_modificar modificado exitosamente."
+                    nueva_actividad "$current" "memoria" "cambiar nombre de usuario de $usuario_a_modificar a $nuevo_nombre"
                 fi                
                 ;;
             2)      
@@ -49,6 +63,7 @@ modificar_usuario(){
                 if ["$existe" = "existe"]; then                               
                     sudo passwd "$usuario_a_modificar"
                     echo "Usuario $usuario_a_modificar modificado exitosamente."    
+                    nueva_actividad "$current" "memoria" "cambiar contraseña a $usuario_a_modificar"
                 fi 
                 ;;    
             3)
@@ -61,6 +76,7 @@ modificar_usuario(){
                     read -p "Ingrese el nuevo directorio de usuario: " nuevo_directorio
                     sudo usermod -d "$nuevo_directorio" "$usuario_a_modificar"
                     echo "Usuario $usuario_a_modificar modificado exitosamente."
+                    nueva_actividad "$current" "memoria" "cambiar directorio de $usuario_a_modificar a directorio $nuevo_directorio"
                 fi
                 ;;    
             4)
@@ -73,6 +89,7 @@ modificar_usuario(){
                     read -p "Ingrese el nuevo grupo de usuario: " nuevo_grupo
                     sudo usermod -g "$nuevo_grupo" "$usuario_a_modificar"
                     echo "Usuario $usuario_a_modificar modificado exitosamente."
+                    nueva_actividad "$current" "memoria" "cambiar grupo de $usuario_a_modificar a grupo $nuevo_grupo"
                 fi
                 ;;
             5)
@@ -84,6 +101,7 @@ modificar_usuario(){
                     read -p "Ingrese la nueva fecha de expiración de usuario: " nueva_fecha
                     sudo usermod -e "$nueva_fecha" "$usuario_a_modificar"
                     echo "Usuario $usuario_a_modificar modificado exitosamente."
+                    nueva_actividad "$current" "memoria" "cambiar fecha de expiración de $usuario_a_modificar a $nueva_fecha"
                 fi
                 ;;      
             salir)
@@ -116,9 +134,9 @@ gestionar_usuarios() {
         echo "1. Crear usuario"
         echo "2. Deshabilitar usuario"
         echo "3. Modificar usuario"
-
+	echo "\nEscriba \"atras\" para volver, o \"salir\" para cerrar el programa"
         read -p "Ingrese su opción: " item
-
+        nueva_actividad "$current" "procesos" "gestión de usuarios"
         case $item in
             1)
                 read -p "Ingrese el nombre de usuario a crear: " nuevo_usuario
@@ -130,6 +148,7 @@ gestionar_usuarios() {
                     sudo adduser "$nuevo_usuario"
                     echo "$nuevo_usuario;ACTIVO">> "$USUARIOS_FILE"
                     echo "Usuario $nuevo_usuario creado exitosamente."
+                    nueva_actividad "$current" "memoria" "crear usuario $nuevo_usuario"
                 fi
                 ;;
             2)
@@ -140,6 +159,7 @@ gestionar_usuarios() {
                     sudo userdel -r "$usuario_a_deshabilitar"
                     sed -i "s/$usuario_a_deshabilitar;ACTIVO/$usuario_a_deshabilitar;INACTIVO/g" "$USUARIOS_FILE"
                     echo "Usuario $usuario_a_deshabilitar deshabilitado exitosamente."
+                    nueva_actividad "$current" "memoria" "deshabilitar a $usuario_a_deshabilitar"
 
                 else
                     echo "El usuario $usuario_a_deshabilitar no existe."
@@ -161,7 +181,7 @@ gestionar_usuarios() {
     done
 }
 
-validar_grupo(){
+validar_grupo() {
     local grupo=$1
     if grep -q "^$grupo:" /etc/group; then
         return "existe"
@@ -172,16 +192,16 @@ validar_grupo(){
 }
 
 
-modificar_grupo(){
+modificar_grupo() {
     while true; do
         echo ""
         echo "MODIFICAR GRUPO"
         echo "Seleccione una opción para modificar grupo:"
         echo "1. Modificar nombre de grupo"
         echo "2. Modificar contraseña de grupo"         
-
+	echo "\nEscriba \"atras\" para volver, o \"salir\" para cerrar el programa"
         read -p "Ingrese su opción: " item
-        
+        nueva_actividad "$current" "procesos" "modificar grupo"
         case $item in
             1)
                 read -p "Ingrese el nombre de grupo a modificar: " grupo_a_modificar
@@ -191,6 +211,7 @@ modificar_grupo(){
                     read -p "Ingrese el nuevo nombre de grupo: " nuevo_nombre                   
                     sudo groupmod -n "$nuevo_nombre" "$grupo_a_modificar"
                     echo "Grupo $grupo_a_modificar modificado exitosamente."
+                    nueva_actividad "$current" "memoria" "modificar nombre de $grupo_a_modificar a $nuevo_nombre"
                 fi
                 ;;
             2)                
@@ -199,7 +220,8 @@ modificar_grupo(){
                 
                 if ["$existe" = "existe"]; then                        
                     sudo gpasswd "$grupo_a_modificar"
-                    echo "Grupo $grupo_a_modificar modificado exitosamente."    
+                    echo "Grupo $grupo_a_modificar modificado exitosamente."
+                    nueva_actividad "$current" "memoria" "modificar contraseña de $grupo_a_modificar"
                 fi 
                 ;;     
             salir)
@@ -226,8 +248,9 @@ gestionar_deptos() {
         echo "1. Crear departamento"
         echo "2. Deshabilitar departamento"
         echo "3. Modificar departamento"
+	echo "\nEscriba \"atras\" para volver, o \"salir\" para cerrar el programa"
         read -p "Ingrese su opción: " item
-
+        nueva_actividad "$current" "procesos" "gestión de departamentos"
         case $item in
             1)
                 read -p "Ingrese el nombre del departamento a crear: " nuevo_depto
@@ -239,6 +262,7 @@ gestionar_deptos() {
                     sudo addgroup "$nuevo_depto"
                     echo "$nuevo_depto;ACTIVO" >> "$DEPTOS_FILE"
                     echo "Departamento $nuevo_depto creado exitosamente."
+                    nueva_actividad "$current" "memoria" "crear $nuevo_depto"
                 fi
                 ;;
             2)
@@ -248,7 +272,7 @@ gestionar_deptos() {
                     sudo groupdel "$depto_a_deshabilitar"
                     sed -i "s/$depto_a_deshabilitar;ACTIVO/$depto_a_deshabilitar;INACTIVO/g" "$DEPTOS_FILE"
                     echo "Departamento $depto_a_deshabilitar deshabilitado exitosamente."
-                    
+                    nueva_actividad "$current" "memoria" "deshabilitar $dept_a_deshabilitar"
                 else
                     echo "El departamento $depto_a_deshabilitar no existe."
                 fi
@@ -279,8 +303,9 @@ gestionar_asignaciones() {
         echo "Seleccione una opción para gestión de asignaciones:"
         echo "1. Asignar usuario a departamento"
         echo "2. Desasignar usuario de departamento"
+	echo "\nEscriba \"atras\" para volver, o \"salir\" para cerrar el programa"
         read -p "Ingrese su opción: " item
-
+        nueva_actividad "$current" "procesos" "gestión de usuarios a departamentos"
         case $item in
             1)
                 read -p "Ingrese el nombre de usuario a asignar: " usuario_asignar
@@ -291,6 +316,7 @@ gestionar_asignaciones() {
                     sudo usermod -a -G "$depto_asignar" "$usuario_asignar"
                     echo "$usuario_asignar;$depto_asignar;ASIGNADO" >> "$ASIGNACIONES_FILE"
                     echo "Usuario $usuario_asignar asignado exitosamente al departamento $depto_asignar."
+                    nueva_actividad "$current" "memoria" "asignar $usuario_asignar a $dept_asignar"
                 else
                     echo "El usuario $usuario_asignar o el departamento $depto_asignar no existen."
                 fi
@@ -303,6 +329,7 @@ gestionar_asignaciones() {
                     sudo gpasswd -d "$usuario_desasignar" "$depto_desasignar"
                     sed -i "s/$usuario_desasignar;$depto_desasignar;ASIGNADO/$usuario_desasignar;$depto_desasignar;DESASIGNADO/g" "$ASIGNACIONES_FILE"                    
                     echo "Usuario $usuario_desasignar desasignado exitosamente del departamento $depto_desasignar."
+                    nueva_actividad "$current" "memoria" "desasignar a $usuario_desasignar de $dept_desasignar"
                 else
                     echo "El usuario $usuario_desasignar o el departamento $depto_desasignar no existen."
                 fi
@@ -323,6 +350,7 @@ gestionar_asignaciones() {
 # Función para buscar líneas que contengan una cadena específica en un archivo de logs
 buscar_cadena() {
     grep "$1" "$LOG_FILE"
+    nueva_actividad "$current" "archivos" "busqueda de cadena"
 }
 
 # Función para generar estadísticas específicas en un archivo de logs
@@ -332,12 +360,14 @@ generar_estadisticas() {
     echo "Cantidad de errores: $errores"
     
     # Puedes agregar más estadísticas según tus necesidades
+
+    nueva_actividad "$current" "archivos" "generación de estadisticas de logs"
 }
 
 # Función para gestionar logs
 gestionar_logs() {
+    nueva_actividad "$current" "procesos" "gestión de logs"
     read -p "Ingrese la ruta del archivo de logs: " LOG_FILE
-
     if [ ! -f "$LOG_FILE" ]; then
         echo "El archivo de logs no existe. Verifique la ruta y vuelva a intentar."
         return
@@ -349,14 +379,16 @@ gestionar_logs() {
         echo "Seleccione una opción para gestión de logs:"
         echo "1. Buscar en logs"
         echo "2. Generar estadísticas de logs"
+	echo "\nEscriba \"atras\" para volver, o \"salir\" para cerrar el programa"
         read -p "Ingrese su opción: " opcion
-
+        nueva_actividad "$current" "archivos" "lectura de archivo de logs $LOG_FILE"
         case $opcion in
             1)
                 read -p "Ingrese el patrón de búsqueda: " patron_busqueda
                 # Lógica para buscar en logs con awk, sed, grep
                 echo "Resultados de la búsqueda para el patrón '$patron_busqueda':"
                 buscar_cadena "$patron_busqueda"
+                nueva_actividad "$current" "archivos" "busqueda por patrón: $patron_busqueda"
                 ;;
             2)
                 # Lógica para generar estadísticas de logs con patrones específicos
@@ -384,17 +416,27 @@ gestionar_actividades() {
         echo "1. Rastrear actividades de memoria"
         echo "2. Rastrear actividades de procesos"
         echo "3. Rastrear actividades de archivos"
+	echo "\nEscriba \"atras\" para volver, o \"salir\" para cerrar el programa"
         read -p "Ingrese su opción: " opcion
-
+        nueva_actividad "$current" "procesos" "gestión de actividades"
         case $opcion in
             1)
                 # Agregar lógica para rastrear actividades de memoria
+                memoria=$(grep -E "memoria" "$ACTIVIDADES_FILE")
+                echo "$memoria"
+                nueva_actividad "$current" "archivos" "rastreo actividades de memoria"
                 ;;
             2)
                 # Agregar lógica para rastrear actividades de procesos
+                procesos=$(grep -E "procesos" "$ACTIVIDADES_FILE")
+                echo "$procesos"
+                nueva_actividad "$current" "archivos" "rastreo actividades de procesos"
                 ;;
             3)
                 # Agregar lógica para rastrear actividades de archivos
+                archivos=$(grep -E "archivos" "$ACTIVIDADES_FILE")
+                echo "$archivos"
+                nueva_actividad "$current" "archivos" "rastreo actividades de archivos"
                 ;;
             salir)
                 exit 0
@@ -417,11 +459,13 @@ gestionar_sistema() {
         echo "Seleccione una opción para gestión del sistema:"
         echo "1. Monitorizar estado del sistema"
         echo "2. Crear reporte de alerta"
+	echo "Escriba \"atras\" para volver, o \"salir\" para cerrar el programa"
         read -p "Ingrese su opción: " opcion
 
         case $opcion in
             1)
-                # Agregar lógica para monitorizar estado del sistema
+                last_login=$(grep "$current;procesos;inicio de sesión" actividades.txt | tail -n 1)
+                echo "$last_login"
                 ;;
             2)
                 # Agregar lógica para crear reporte de alerta
@@ -439,7 +483,7 @@ gestionar_sistema() {
     done
 }
 
-menu(){
+menu() {
     while true; do
         echo ""
         echo "Bienvenido al sistema de gestión de empresa"    
@@ -449,8 +493,10 @@ menu(){
         echo "3. Usuarios x departamentos"
         echo "4. Gestión de logs"
         echo "5. Gestión de actividades en el sistema"
-        echo "6. Gestión del sistema"
-        
+        echo "6. Gestión del sistem"
+
+        echo "O escriba \"salir\" para cerrar el programa"
+
         read -p "Ingrese su opción: " item
         
         case $item in
@@ -484,4 +530,25 @@ menu(){
     done
 }
 
-menu
+login() {
+	
+	while true; do
+		echo "Bienvenido al sistema de gestión de empres"
+		echo "Debe iniciar sesión para poder usar el sistea"
+		read -p "Escriba su nombre de usuario: " user_attempt
+		if grep -q "$user_attempt" "$USUARIOS_FILE" && grep -q "ACTIVO" "$USUARIOS_FILE"; then
+            if [ $user_attempt != "admin" ]; then
+                read -s -p "Escriba su contraseña: " kennwort
+                echo -e "$kennwort" | su - "$user_attempt"
+            else echo "Bienvenido $user_attempt"
+            fi
+            current=$user_attempt
+			nueva_actividad "$current" "procesos" "inicio de sesión"
+			menu
+		else echo "Usuario no encontrado, intente otra vez"
+		fi
+	done
+}
+
+login
+
