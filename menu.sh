@@ -122,7 +122,7 @@ gestionar_usuarios() {
         echo "1. Crear usuario"
         echo "2. Deshabilitar usuario"
         echo "3. Modificar usuario"
-        echp "4. Habilitar usuario"
+        echo "4. Habilitar usuario"
 	echo "\nEscriba \"atras\" para volver, o \"salir\" para cerrar el programa"
         read -p "Ingrese su opción: " item
         nueva_actividad "$current" "procesos" "gestión de usuarios"
