@@ -8,68 +8,62 @@ LOGS_FILE="logs.txt"
 ACTIVIDADES_FILE="actividades.txt"
 SISTEMA_FILE="sistema.txt"
 
-validar_usuario(){
+validar_usuario() {
     local nombre=$1
     if id "$nombre" >/dev/null 2>&1; then
-        return "existe"
+        echo "existe"
     else
-        return "no existe"
+        echo "no existe"
     fi
 }
 
-# Menu para modificar usuario
-modificar_usuario(){
+modificar_usuario() {
     while true; do
         echo ""
         echo "MODIFICAR USUARIO"
         echo "Seleccione una opción para modificar usuario:"
         echo "1. Modificar nombre de usuario"
         echo "2. Modificar contraseña de usuario"
-        echo "3. Modificar directorio de usuario"        
-        echo "4. Modificar grupo de usuario"        
+        echo "3. Modificar directorio de usuario"
+        echo "4. Modificar grupo de usuario"
         echo "5. Modificar fecha de expiración de usuario"
         read -p "Ingrese su opción: " item
-        
+
         case $item in
-        
             1)
                 read -p "Ingrese el nombre de usuario a modificar: " usuario_a_modificar
                 existe=$(validar_usuario "$usuario_a_modificar")
-                
-                if ["$existe" = "existe"]; then
-                    read -p "Ingrese el nuevo nombre de usuario: " nuevo_nombre                   
+
+                if [ "$existe" == "existe" ]; then
+                    read -p "Ingrese el nuevo nombre de usuario: " nuevo_nombre
                     sudo usermod -l "$nuevo_nombre" "$usuario_a_modificar"
                     echo "Usuario $usuario_a_modificar modificado exitosamente."
-                fi                
+                fi
                 ;;
-            2)      
-                read -p "Ingrese el nombre de usuario a modificar: " usuario_a_modificar   
-                existe=$(validar_usuario "$usuario_a_modificar")
-                
-                if ["$existe" = "existe"]; then                               
-                    sudo passwd "$usuario_a_modificar"
-                    echo "Usuario $usuario_a_modificar modificado exitosamente."    
-                fi 
-                ;;    
-            3)
-                                
+            2)
                 read -p "Ingrese el nombre de usuario a modificar: " usuario_a_modificar
-
                 existe=$(validar_usuario "$usuario_a_modificar")
-                if ["$existe" = "existe"]; then
-                
+
+                if [ "$existe" == "existe" ]; then
+                    sudo passwd "$usuario_a_modificar"
+                    echo "Usuario $usuario_a_modificar modificado exitosamente."
+                fi
+                ;;
+            3)
+                read -p "Ingrese el nombre de usuario a modificar: " usuario_a_modificar
+                existe=$(validar_usuario "$usuario_a_modificar")
+
+                if [ "$existe" == "existe" ]; then
                     read -p "Ingrese el nuevo directorio de usuario: " nuevo_directorio
                     sudo usermod -d "$nuevo_directorio" "$usuario_a_modificar"
                     echo "Usuario $usuario_a_modificar modificado exitosamente."
                 fi
-                ;;    
+                ;;
             4)
-
                 read -p "Ingrese el nombre de usuario a modificar: " usuario_a_modificar
-
                 existe=$(validar_usuario "$usuario_a_modificar")
-                if ["$existe" = "existe"]; then
-                
+
+                if [ "$existe" == "existe" ]; then
                     read -p "Ingrese el nuevo grupo de usuario: " nuevo_grupo
                     sudo usermod -g "$nuevo_grupo" "$usuario_a_modificar"
                     echo "Usuario $usuario_a_modificar modificado exitosamente."
@@ -77,32 +71,31 @@ modificar_usuario(){
                 ;;
             5)
                 read -p "Ingrese el nombre de usuario a modificar: " usuario_a_modificar
-
                 existe=$(validar_usuario "$usuario_a_modificar")
-                if ["$existe" = "existe"]; then
-                    
+
+                if [ "$existe" == "existe" ]; then
                     read -p "Ingrese la nueva fecha de expiración de usuario: " nueva_fecha
                     sudo usermod -e "$nueva_fecha" "$usuario_a_modificar"
                     echo "Usuario $usuario_a_modificar modificado exitosamente."
                 fi
-                ;;      
+                ;;
             salir)
                 exit 0
                 ;;
             atras)
                 gestionar_usuarios
-                ;; 
+                ;;
             *)
-            echo "Opción no válida"
-            ;;
+                echo "Opción no válida"
+                ;;
 
         esac
 
     done
-
-    
-
 }
+
+
+
 
 
 # Función para gestionar usuarios
@@ -161,61 +154,59 @@ gestionar_usuarios() {
     done
 }
 
-validar_grupo(){
+validar_grupo() {
     local grupo=$1
     if grep -q "^$grupo:" /etc/group; then
-        return "existe"
+        echo "existe"
     else
-        return "no existe"
+        echo "no existe"
     fi
-
 }
 
 
-modificar_grupo(){
+modificar_grupo() {
     while true; do
         echo ""
         echo "MODIFICAR GRUPO"
         echo "Seleccione una opción para modificar grupo:"
         echo "1. Modificar nombre de grupo"
-        echo "2. Modificar contraseña de grupo"         
-
+        echo "2. Modificar contraseña de grupo"
         read -p "Ingrese su opción: " item
-        
+
         case $item in
             1)
                 read -p "Ingrese el nombre de grupo a modificar: " grupo_a_modificar
                 existe=$(validar_grupo "$grupo_a_modificar")
-                
-                if ["$existe" = "existe"]; then
-                    read -p "Ingrese el nuevo nombre de grupo: " nuevo_nombre                   
+
+                if [ "$existe" == "existe" ]; then
+                    read -p "Ingrese el nuevo nombre de grupo: " nuevo_nombre
                     sudo groupmod -n "$nuevo_nombre" "$grupo_a_modificar"
                     echo "Grupo $grupo_a_modificar modificado exitosamente."
                 fi
                 ;;
-            2)                
+            2)
                 read -p "Ingrese el nombre de grupo a modificar: " grupo_a_modificar
                 existe=$(validar_grupo "$grupo_a_modificar")
-                
-                if ["$existe" = "existe"]; then                        
+
+                if [ "$existe" == "existe" ]; then
                     sudo gpasswd "$grupo_a_modificar"
-                    echo "Grupo $grupo_a_modificar modificado exitosamente."    
-                fi 
-                ;;     
+                    echo "Grupo $grupo_a_modificar modificado exitosamente."
+                fi
+                ;;
             salir)
                 exit 0
                 ;;
             atras)
                 gestionar_deptos
-                ;; 
+                ;;
             *)
-            echo "Opción no válida"
-            ;;
+                echo "Opción no válida"
+                ;;
 
-        esac       
-
+        esac
     done
 }
+
 # Función para gestionar departamentos
 gestionar_deptos() {
 
