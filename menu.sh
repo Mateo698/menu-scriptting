@@ -461,11 +461,7 @@ mostrar_estadisticas_dpkg() {
 # Función para gestionar logs
 gestionar_logs() {
     
-    read -p "Ingrese la ruta del archivo de logs: " LOG_FILE
-    if [ ! -f "$LOG_FILE" ]; then
-        echo "El archivo de logs no existe. Verifique la ruta y vuelva a intentar."
-        return
-    fi
+    
 
     while true; do
         echo ""

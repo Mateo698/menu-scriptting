@@ -29,3 +29,8 @@ prueba;procesos;inicio de sesión;2023-11-30T01:57:00Z
 prueba;procesos;gestión de usuarios;2023-11-30T01:59:29Z
 prueba;memoria;deshabilitar a prueba;2023-11-30T01:59:36Z
 prueba;procesos;gestión de usuarios;2023-11-30T01:59:41Z
+admin;procesos;inicio de sesión;2023-11-30T09:00:36Z
+admin;procesos;inicio de sesión;2023-11-30T09:01:19Z
+admin;archivos;lectura de archivo de logs ;2023-11-30T09:01:24Z
+admin;procesos;inicio de sesión;2023-11-30T09:01:31Z
+admin;archivos;lectura de archivo de logs ;2023-11-30T09:01:38Z
