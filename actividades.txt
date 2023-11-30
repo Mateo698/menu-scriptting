@@ -34,3 +34,5 @@ admin;procesos;inicio de sesión;2023-11-30T09:01:19Z
 admin;archivos;lectura de archivo de logs ;2023-11-30T09:01:24Z
 admin;procesos;inicio de sesión;2023-11-30T09:01:31Z
 admin;archivos;lectura de archivo de logs ;2023-11-30T09:01:38Z
+admin;procesos;inicio de sesión;2023-11-30T10:38:39Z
+admin;procesos;gestión de usuarios;2023-11-30T10:38:43Z
