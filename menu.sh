@@ -359,7 +359,6 @@ mostrar_estadisticas_kernel() {
     
     # Puedes agregar más estadísticas según tus necesidades
 
-    nueva_actividad "$current" "archivos" "generación de estadisticas de logs"
     # Número total de líneas en el registro del kernel
     total_lineas_kernel=$(wc -l /var/log/kern.log | cut -d ' ' -f1)
     echo "Total de líneas en el registro del kernel: $total_lineas_kernel"
@@ -380,6 +379,7 @@ mostrar_estadisticas_kernel() {
     advertencias_kernel=$(grep -ic "warning" /var/log/kern.log)
     echo "Número de mensajes de advertencia en el registro del kernel: $advertencias_kernel"
     
+    nueva_actividad "$current" "archivos" "generación de estadisticas del kernel"
 
 }
 
@@ -387,7 +387,6 @@ mostrar_estadisticas_kernel() {
 
 mostrar_estadisticas_syslog() {
     echo "Generando estadísticas del syslog..."
-    
     # Número total de líneas en el registro del syslog
     total_lineas_syslog=$(wc -l /var/log/syslog | cut -d ' ' -f1)
     echo "Total de líneas en el registro del syslog: $total_lineas_syslog"
@@ -400,6 +399,7 @@ mostrar_estadisticas_syslog() {
     apagado_syslog=$(grep -ic "shutdown" /var/log/syslog)
     echo "Número de eventos de apagado en el registro del syslog: $apagado_syslog"
     
+    nueva_actividad "$current" "archivos" "generación de estadisticas del syslog"
     
 }
 
@@ -581,7 +581,22 @@ gestionar_sistema() {
         case $opcion in
             1)
                 last_login=$(grep "$current;procesos;inicio de sesión" actividades.txt | tail -n 1)
-                echo "$last_login"
+                last_activities=$(grep -F "$last_login" -B 10000 actividades.txt | tail -n +2)
+                echo "$last_activities"
+
+                echo "ESTADO DEL SISTEMA"
+                echo "----------------------------------------"
+                echo "Usuario actual: $current"
+                echo "Último inicio de sesión: $last_login"
+                echo "Memoria utilizada: $(free -m | grep Mem | awk '{print $3}') MB"
+                echo "Memoria disponible: $(free -m | grep Mem | awk '{print $4}') MB"
+                echo "Memoria total: $(free -m | grep Mem | awk '{print $2}') MB"
+                echo "Tamaño del log de actividades: $(wc -l actividades.txt | cut -d ' ' -f1) líneas"
+                echo "Tamaño del log de usuarios: $(wc -l usuarios.txt | cut -d ' ' -f1) líneas"
+                echo "----------------------------------------"
+
+                
+                nueva_actividad "$current" "procesos" "monitorización del sistema"
                 ;;
             2)
                 # Agregar lógica para crear reporte de alerta
