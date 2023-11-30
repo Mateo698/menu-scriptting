@@ -671,8 +671,10 @@ login() {
             current=$user_attempt
 			nueva_actividad "$current" "procesos" "inicio de sesión"
 			menu
-		else echo "Usuario no encontrado, intente otra vez"
+		else 
+            echo "Usuario no encontrado, intente otra vez"
 		fi
+        
 	done
 }
 
