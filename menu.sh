@@ -52,6 +52,9 @@ modificar_usuario() {
                     read -p "Ingrese el nuevo nombre de usuario: " nuevo_nombre
                     sudo usermod -l "$nuevo_nombre" "$usuario_a_modificar"
                     echo "Usuario $usuario_a_modificar modificado exitosamente."
+                    # Actualizar el archivo de usuarios.txt
+                    sed -i "s/$usuario_a_modificar;ACTIVO/$nuevo_nombre;ACTIVO/g" "$USUARIOS_FILE"
+                    
                     nueva_actividad "$current" "memoria" "cambiar nombre de usuario de $usuario_a_modificar a $nuevo_nombre"
                 fi                
                 ;;
