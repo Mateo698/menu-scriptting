@@ -357,7 +357,6 @@ buscar_cadena() {
 mostrar_estadisticas_kernel() {
     echo "Generando estadísticas del kernel..."
     
-    # Puedes agregar más estadísticas según tus necesidades
 
     # Número total de líneas en el registro del kernel
     total_lineas_kernel=$(wc -l /var/log/kern.log | cut -d ' ' -f1)
@@ -461,7 +460,7 @@ mostrar_estadisticas_dpkg() {
 
 # Función para gestionar logs
 gestionar_logs() {
-    nueva_actividad "$current" "procesos" "gestión de logs"
+    
     read -p "Ingrese la ruta del archivo de logs: " LOG_FILE
     if [ ! -f "$LOG_FILE" ]; then
         echo "El archivo de logs no existe. Verifique la ruta y vuelva a intentar."
