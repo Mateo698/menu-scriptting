@@ -74,7 +74,7 @@ modificar_usuario() {
                     sudo usermod -g "$nuevo_grupo" "$usuario_a_modificar"
                     echo "Usuario $usuario_a_modificar modificado exitosamente."
                 fi
-            ;;
+                ;;
             5)
                 read -p "Ingrese el nombre de usuario a modificar: " usuario_a_modificar
                 existe=$(validar_usuario "$usuario_a_modificar")
@@ -85,12 +85,15 @@ modificar_usuario() {
                     echo "Usuario $usuario_a_modificar modificado exitosamente."
                 fi
                 ;;
+
             salir)
                 exit 0
-            ;;
+                ;;
+
             atras)
                 gestionar_usuarios
                 ;;
+
             *)
                 echo "Opción no válida"
                 ;;
@@ -129,7 +132,7 @@ gestionar_usuarios() {
                     echo "$nuevo_usuario;ACTIVO">> "$USUARIOS_FILE"
                     echo "Usuario $nuevo_usuario creado exitosamente."
                 fi
-            ;;
+                ;;
             2)
                 read -p "Ingrese el nombre de usuario a deshabilitar: " usuario_a_deshabilitar
                 if id "$usuario_a_deshabilitar" >/dev/null 2>&1; then
@@ -142,19 +145,19 @@ gestionar_usuarios() {
                 else
                     echo "El usuario $usuario_a_deshabilitar no existe."
                 fi
-            ;;
+                ;;
             3)
                 modificar_usuario
-            ;;
+                ;;
             salir)
                 exit 0
-            ;;
+                ;;
             atras)
                 menu
-            ;;
+                ;;
             *)
                 echo "Opción no válida"
-            ;;
+                ;;
         esac
     done
 }
@@ -200,7 +203,7 @@ modificar_grupo() {
                 ;;
             salir)
                 exit 0
-            ;;
+                ;;
             atras)
                 gestionar_deptos
                 ;;
@@ -236,7 +239,7 @@ gestionar_deptos() {
                     echo "$nuevo_depto;ACTIVO" >> "$DEPTOS_FILE"
                     echo "Departamento $nuevo_depto creado exitosamente."
                 fi
-            ;;
+                ;;
             2)
                 read -p "Ingrese el nombre del departamento a deshabilitar: " depto_a_deshabilitar
                 if grep -q "^$depto_a_deshabilitar:" /etc/group; then
@@ -248,17 +251,17 @@ gestionar_deptos() {
                 else
                     echo "El departamento $depto_a_deshabilitar no existe."
                 fi
-            ;;
+                ;;
             3)
                 modificar_grupo
-            ;;
+                ;;
             
             salir)
                 exit 0
-            ;;
+                ;;
             atras)
                 menu
-            ;;
+                ;;
             *)
                 echo "Opción no válida"
             ;;
@@ -290,7 +293,7 @@ gestionar_asignaciones() {
                 else
                     echo "El usuario $usuario_asignar o el departamento $depto_asignar no existen."
                 fi
-            ;;
+                ;;
             2)
                 read -p "Ingrese el nombre de usuario a desasignar: " usuario_desasignar
                 read -p "Ingrese el nombre del departamento: " depto_desasignar
@@ -302,13 +305,13 @@ gestionar_asignaciones() {
                 else
                     echo "El usuario $usuario_desasignar o el departamento $depto_desasignar no existen."
                 fi
-            ;;
+                ;;
             salir)
                 exit 0
-            ;;
+                ;;
             atras)
                 menu
-            ;;
+                ;;
             *)
                 echo "Opción no válida"
             ;;
@@ -469,16 +472,16 @@ gestionar_logs() {
                     6) echo "Saliendo..."; exit ;;
                     *) echo "Opción no válida. Por favor, seleccione una opción válida." ;;
                 esac
-            ;;
+                ;;
             salir)
                 exit 0
-            ;;
+                ;;
             atras)
                 menu
-            ;;
+                ;;
             *)
                 echo "Opción no válida"
-            ;;
+                ;;
         esac
     done
 }
