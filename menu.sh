@@ -329,15 +329,23 @@ mostrar_estadisticas_kernel() {
     total_lineas_kernel=$(wc -l /var/log/kern.log | cut -d ' ' -f1)
     echo "Total de líneas en el registro del kernel: $total_lineas_kernel"
     
+    # Imprimir líneas de error en el registro del kernel
+    echo "Líneas de error en el registro del kernel:"
+    grep -i "error" /var/log/kern.log
+    
     # Número de mensajes de error en el registro del kernel
     errores_kernel=$(grep -ic "error" /var/log/kern.log)
     echo "Número de mensajes de error en el registro del kernel: $errores_kernel"
+    
+    # Imprimir líneas de advertencia en el registro del kernel
+    echo "Líneas de advertencia en el registro del kernel:"
+    grep -i "warning" /var/log/kern.log
     
     # Número de mensajes de advertencia en el registro del kernel
     advertencias_kernel=$(grep -ic "warning" /var/log/kern.log)
     echo "Número de mensajes de advertencia en el registro del kernel: $advertencias_kernel"
     
-    
+    # Puedes agregar más estadísticas aquí según tus necesidades
 }
 
 
@@ -369,8 +377,16 @@ mostrar_estadisticas_boot() {
     total_lineas_boot=$(wc -l /var/log/boot.log | cut -d ' ' -f1)
     echo "Total de líneas en /var/log/boot.log: $total_lineas_boot"
     
+    # Secuencia de eventos durante el arranque
+    echo "Secuencia de eventos durante el arranque:"
+    grep "Starting" /var/log/boot.log
+    
+    # Mensajes de error durante el arranque
+    echo "Mensajes de error durante el arranque:"
+    grep -i "error" /var/log/boot.log
+    
+    # Puedes agregar más estadísticas aquí según tus necesidades
 }
-
 
 
 mostrar_estadisticas_auth() {
