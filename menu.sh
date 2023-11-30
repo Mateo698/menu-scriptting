@@ -34,11 +34,10 @@ modificar_usuario() {
         echo ""
         echo "MODIFICAR USUARIO"
         echo "Seleccione una opción para modificar usuario:"
-	echo "1. Modificar nombre de usuario"
-        echo "2. Modificar contraseña de usuario"
-        echo "3. Modificar directorio de usuario"        
-        echo "4. Modificar grupo de usuario"        
-        echo "5. Modificar fecha de expiración de usuario"
+	    echo "1. Modificar nombre de usuario"
+        echo "2. Modificar contraseña de usuario"      
+        echo "3. Modificar grupo de usuario"        
+        echo "4. Modificar fecha de expiración de usuario"
 	echo ""
 	echo "Escriba \"atras\" para volver, o \"salir\" para cerrar el programa"
         read -p "Ingrese su opción: " item
@@ -65,22 +64,7 @@ modificar_usuario() {
                     echo "Usuario $usuario_a_modificar modificado exitosamente."    
                     nueva_actividad "$current" "memoria" "cambiar contraseña a $usuario_a_modificar"
                 fi 
-                ;;    
-            3)
-                                
-                read -p "Ingrese el nombre de usuario a modificar: " usuario_a_modificar
-
-                ;;
-            2)
-                read -p "Ingrese el nombre de usuario a modificar: " usuario_a_modificar
-                existe=$(validar_usuario "$usuario_a_modificar")
-
-                if [ "$existe" == "existe" ]; then
-                    sudo passwd "$usuario_a_modificar"
-                    echo "Usuario $usuario_a_modificar modificado exitosamente."
-                    nueva_actividad "$current" "memoria" "cambiar directorio de $usuario_a_modificar a directorio $nuevo_directorio"
-                fi
-                ;;
+                ;;   
             3)
                 read -p "Ingrese el nombre de usuario a modificar: " usuario_a_modificar
                 existe=$(validar_usuario "$usuario_a_modificar")
