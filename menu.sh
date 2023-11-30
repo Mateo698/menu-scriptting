@@ -122,6 +122,7 @@ gestionar_usuarios() {
         echo "1. Crear usuario"
         echo "2. Deshabilitar usuario"
         echo "3. Modificar usuario"
+        echp "4. Habilitar usuario"
 	echo "\nEscriba \"atras\" para volver, o \"salir\" para cerrar el programa"
         read -p "Ingrese su opción: " item
         nueva_actividad "$current" "procesos" "gestión de usuarios"
@@ -156,6 +157,22 @@ gestionar_usuarios() {
             3)
                 modificar_usuario
                 ;;
+            4)
+                read -p "Ingrese el nombre de usuario a habilitar: " usuario_a_habilitar
+                if id "$usuario_a_habilitar" >/dev/null 2>&1; then
+                    echo "Se habilitará el usuario $usuario_a_habilitar"
+                    # Deshabilitar el usuario y guardar la información en el archivo usuarios.txt
+                    sudo usermod -U "$usuario_a_habilitar"
+                    sed -i "s/$usuario_a_habilitar;INACTIVO/$usuario_a_habilitar;ACTIVO/g" "$USUARIOS_FILE"
+                    echo "Usuario $usuario_a_habilitar habilitado exitosamente."
+                    nueva_actividad "$current" "memoria" "habilitar a $usuario_a_habilitar"
+
+                else
+                    echo "El usuario $usuario_a_habilitar no existe."
+                fi
+                ;
+            ;;
+            
             salir)
                 exit 0
                 ;;
