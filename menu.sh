@@ -664,6 +664,13 @@ login() {
 		read -p "Escriba su nombre de usuario: " user_attempt
 		if grep -q "$user_attempt" "$USUARIOS_FILE" && grep -q "ACTIVO" "$USUARIOS_FILE"; then
             if [ $user_attempt != "admin" ]; then
+
+                if grep -q "$user_attempt;INACTIVO" "$USUARIOS_FILE"; then
+                    echo "Usuario deshabilitado. No se permite el inicio de sesión."
+                    continue  # Reinicia el bucle para solicitar credenciales nuevamente
+                fi
+
+
                 read -s -p "Escriba su contraseña: " kennwort
                 echo -e "$kennwort" | su - "$user_attempt"
             else echo "Bienvenido $user_attempt"
