@@ -145,7 +145,7 @@ gestionar_usuarios() {
                 if id "$usuario_a_deshabilitar" >/dev/null 2>&1; then
                     echo "Se eliminará el usuario $usuario_a_deshabilitar"
                     # Deshabilitar el usuario y guardar la información en el archivo usuarios.txt
-                    sudo passwd -l "$usuario_a_deshabilitar"
+                    sudo usermod --expiredate 1 "$usuario_a_deshabilitar"
                     sed -i "s/$usuario_a_deshabilitar;ACTIVO/$usuario_a_deshabilitar;INACTIVO/g" "$USUARIOS_FILE"
                     echo "Usuario $usuario_a_deshabilitar deshabilitado exitosamente."
                     nueva_actividad "$current" "memoria" "deshabilitar a $usuario_a_deshabilitar"
@@ -162,7 +162,7 @@ gestionar_usuarios() {
                 if id "$usuario_a_habilitar" >/dev/null 2>&1; then
                     echo "Se habilitará el usuario $usuario_a_habilitar"
                     # Habilitar el usuario y guardar la información en el archivo usuarios.txt
-                    sudo passwd -u "$usuario_a_habilitar"
+                    sudo usermod --expiredate "" "$usuario_a_habilitar"
                     sed -i "s/$usuario_a_habilitar;INACTIVO/$usuario_a_habilitar;ACTIVO/g" "$USUARIOS_FILE"
                     echo "Usuario $usuario_a_habilitar habilitado exitosamente."
                     nueva_actividad "$current" "memoria" "habilitar a $usuario_a_habilitar"
